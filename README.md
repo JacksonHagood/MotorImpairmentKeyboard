@@ -1,1 +1,4 @@
 # MotorImpairmentKeyboard
+
+Members:
+- Jackson Hagood
