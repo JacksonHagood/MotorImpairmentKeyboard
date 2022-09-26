@@ -36,7 +36,7 @@ class Node {
 
             // initialize priority array
             for (unsigned int i = 0; i < 27; i++) {
-                priority[i] = i;
+                priority[i] = 27;
             }
         }
 
@@ -49,19 +49,24 @@ class Node {
             char curr = priority[0];
             char prev = priority[0];
 
-            // TODO: improve efficiency of setting priority of inserted node
-            // move new character to priority 0
-            if (priority[0] != n->character - 'a') {
-                for (unsigned int i = 1; i < 27; i++) {
-                    if (priority[i] == n->character - 'a') {
-                        priority[0] = priority[i];
-                        priority[i] = prev;
-                        break;
-                    } else {
-                        curr = priority[i];
-                        priority[i] = prev;
-                        prev = curr;
-                    }
+            // add to next available priority
+            for (unsigned int i = 0; i < 27; i++) {
+                if (priority[i] == 27) {
+                    priority[i] = n->character - 'a';
+                    break;
+                }
+            }
+        }
+
+        // sets terminal to true
+        void setTerminal() {
+            isTerminal = true;
+
+            // add to next available priority
+            for (unsigned int i = 0; i < 27; i++) {
+                if (priority[i] == 27) {
+                    priority[i] = 26;
+                    break;
                 }
             }
         }
@@ -79,6 +84,8 @@ class Node {
         // returns node corresponding to given priority
         Node* getPriority(unsigned char i) const {
             if (priority[i] == 27) {
+                return nullptr;
+            } else if (priority[i] == 26) {
                 // if priority i is node being terminal, return pointer to current node
                 return (Node*) this;
             } else {
