@@ -1,6 +1,6 @@
 # MotorImpairmentKeyboard
 
-# MIKey
+MIKey
 
 Members:
 - Jackson Hagood
