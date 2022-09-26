@@ -1,4 +1,4 @@
-# MotorImpairmentKeyboard
+# Motor Impairment Keyboard
 
 ## MIKey
 - Jackson Hagood
