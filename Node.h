@@ -13,10 +13,16 @@
     some character, c, can be found with c - 'a'. If children[c - 'a'] == nullptr, then no child
     exists for character c.
 
-    Array of priorities keeps track of what following characters are highest in priority (high to
-    low) each item in priorities[] corresponds to the index in children[] (node of priority 0 ->
-    children[priorities[0]]). There is one exception to this, where p[i] is 26, indicating what the
-    priority, i, of the node being terminal (end of some word) is.
+    TODO: UPDATE
+        priority[i] = 26 -> Terminal Priority
+        priority[i] = 27 -> No priority
+        priority[i] = otherwise ->
+
+        Array of priorities keeps track of what following characters are highest in priority (high to
+        low) each item in priorities[] corresponds to the index in children[] (node of priority 0 ->
+        children[priorities[0]]). There is one exception to this, where p[i] is 26, indicating what the
+        priority, i, of the node being terminal (end of some word) is. Also, if p[i] is 27 then there
+        are no more results
 */
 
 class Node {
@@ -24,18 +30,16 @@ class Node {
         char character; // character of node
         bool isTerminal; // bool for whether node can be terminal
         Node* children[26]; // array of pointers to subsequent nodes
-        unsigned char priority[27]; // array of priority refering to array
+        unsigned char priority[4]; // array of priority values
 
     public:
         // constructor with character
         Node(const char c) : character(c), isTerminal(false) {
-            // initialize pointer array to nullptr
-            for (unsigned int i = 0; i < 26; i++) {
+            for (unsigned char i = 0; i < 26; i++) {
                 children[i] = nullptr;
             }
 
-            // initialize priority array
-            for (unsigned int i = 0; i < 27; i++) {
+            for (unsigned int i = 0; i < 4; i++) {
                 priority[i] = 27;
             }
         }
@@ -44,29 +48,23 @@ class Node {
         void addNode(Node* n) {
             // update array with new node
             children[n->character - 'a'] = n;
-
-            // move priority of new node to front
-            char curr = priority[0];
-            char prev = priority[0];
-
-            // add to next available priority
-            for (unsigned int i = 0; i < 27; i++) {
-                if (priority[i] == 27) {
-                    priority[i] = n->character - 'a';
-                    break;
-                }
-            }
         }
 
         // sets terminal to true
         void setTerminal() {
             isTerminal = true;
+        }
 
-            // add to next available priority
-            for (unsigned int i = 0; i < 27; i++) {
+        // adds item to priority array
+        void addPriority(unsigned char n) {
+            unsigned char count = 0;
+
+            for (unsigned char i = 0; i < 4; i++) {
                 if (priority[i] == 27) {
-                    priority[i] = 26;
-                    break;
+                    priority[i] = n + count * 28;
+                    return;
+                } else if (priority[i] == n) {
+                    count++;
                 }
             }
         }
@@ -81,17 +79,13 @@ class Node {
             return children[c - 'a'];
         }
 
-        // returns node corresponding to given priority
-        Node* getPriority(unsigned char i) const {
-            if (priority[i] == 27) {
-                return nullptr;
-            } else if (priority[i] == 26) {
-                // if priority i is node being terminal, return pointer to current node
-                return (Node*) this;
-            } else {
-                // otherwise, return pointer to other node (could be nullptr)
-                return children[priority[i]];
-            }            
+        Node* getNode(unsigned char i) const {
+            return children[i];
+        }
+
+        // priority array at i
+        unsigned char getPriority(unsigned char i) const {
+            return priority[i];         
         }
 };
 

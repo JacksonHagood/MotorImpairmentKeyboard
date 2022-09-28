@@ -63,10 +63,18 @@ class Trie {
                         currNode->addNode(newNode);
                     }
 
+                    if (currNode->getPriority(3) == 27) {
+                        currNode->addPriority(word.at(i) - 'a');
+                    }
+
                     currNode = currNode->getNode(word.at(i));
                 }
                 
                 currNode->setTerminal();
+
+                if (currNode->getPriority(3) == 27) {
+                    currNode->addPriority(26);
+                }
             }
         }
 
@@ -85,6 +93,36 @@ class Trie {
             }
 
             // TODO: use currNode to determine three auto-complete candidates using priority arrays in nodes
+
+            Node* root = currNode;
+            unsigned char found = 0;
+
+            for (unsigned char i = 0; i < 4; i++) {
+                if (root->getPriority(i) == 27) {
+                    return 0;
+                }
+
+                currNode = root;
+                unsigned char currPriority = i;
+                unsigned char nextPriority;
+                std::string candidate = "";
+
+                while (true) {
+                    nextPriority = currNode->getPriority(currPriority) / 28;
+
+                    if (currNode->getPriority(currPriority) == 26) {
+                        break;
+                    }
+
+                    currNode = currNode->getNode(currNode->getPriority(currPriority));
+                    currPriority = nextPriority;
+                    candidate += currNode->getChar();
+                }
+
+                if (candidate != "") {
+                    candidates[found++] = candidate;
+                }
+            }
 
             return 1;
         }
