@@ -97,7 +97,7 @@ class Trie {
             Node* root = currNode;
             unsigned char found = 0;
 
-            for (unsigned char i = 0; i < 4; i++) {
+            for (unsigned char i = 0; i < 4 && found < 3; i++) {
                 if (root->getPriority(i) == 27) {
                     return 0;
                 }
@@ -114,9 +114,11 @@ class Trie {
                         break;
                     }
 
-                    currNode = currNode->getNode(currNode->getPriority(currPriority));
+                    currNode = currNode->getNode((unsigned char) (currNode->getPriority(currPriority) % 28));
                     currPriority = nextPriority;
                     candidate += currNode->getChar();
+
+                    
                 }
 
                 if (candidate != "") {

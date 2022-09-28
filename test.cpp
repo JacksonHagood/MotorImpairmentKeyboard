@@ -6,13 +6,22 @@ int main() {
     // simple test program for Trie
     Trie z("dictionary.txt");
 
-    std::string partial = "he";
-    std::cout << "PARTIAL: " << partial << '\n';
+    while (true) {
+        std::string partial;
 
-    std::string results[3] = {"", "", ""};
-    z.getCandidates(partial, results);
+        std::cout << "ENTER PARTIAL WORD: ";
+        std::cin >> partial;
 
-    for (unsigned int i = 0; i < 3; i++) {
-        std::cout << "PRIORITY " << i << ": " << results[i] << '\n';
+        std::string results[3] = {"", "", ""};
+        z.getCandidates(partial, results);
+
+        std::cout << "PARTIAL: " << partial << '\n';
+
+        for (unsigned int i = 0; i < 3; i++) {
+            std::cout << "PRIORITY " << i << ": " << results[i] << '\n';
+        }
+
+        std::cout << '\n';
     }
+
 }

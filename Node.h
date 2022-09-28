@@ -63,7 +63,7 @@ class Node {
                 if (priority[i] == 27) {
                     priority[i] = n + count * 28;
                     return;
-                } else if (priority[i] == n) {
+                } else if (priority[i] % 28 == n) {
                     count++;
                 }
             }
