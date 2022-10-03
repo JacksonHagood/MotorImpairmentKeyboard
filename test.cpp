@@ -18,7 +18,11 @@ int main() {
         std::cout << "PARTIAL: " << partial << '\n';
 
         for (unsigned int i = 0; i < 3; i++) {
-            std::cout << "PRIORITY " << i << ": " << partial << results[i] << '\n';
+            if (results[i] == "") {
+                std::cout << "PRIORITY " << i << ": \033[31mNONE\033[0m\n";
+            } else {
+                std::cout << "PRIORITY " << i << ": \033[33m" << partial << "\033[0m\033[32m" << results[i] << "\033[0m\n";
+            }
         }
 
         std::cout << '\n';

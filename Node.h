@@ -2,7 +2,8 @@
 # define _NODE_H
 
 /* Node Class Design:
-    Node for characters inside Trie data structure. Each node takes ~110 bytes of memory.
+    Node for characters inside Trie data structure. Each node takes ~110 bytes of memory (assuming
+    Node* is 4 bytes).
 
     Each node represents a character (technically redundant with current implementation, but kept
     for simplicity). Each node has the capacity to be a terminal node (also technically redundant),

@@ -11,7 +11,7 @@
 /* Trie Class Design:
     Trie can be thought of having 26 roots, one for each alphabetic character. Trie is constructed
     using a dictionary file. This constructor creates nodes as needed and sets priority (dictionary
-    must be in priority order).
+    must be in priority order). Current dictionary requires 23965 nodes (~2.5 MB).
 
     To find candidates, Trie is first traversed to find the final known node (or see if no such
     word exists). Then, candidates are found using the priority arrays present in each of the
