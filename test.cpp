@@ -18,7 +18,7 @@ int main() {
         std::cout << "PARTIAL: " << partial << '\n';
 
         for (unsigned int i = 0; i < 3; i++) {
-            std::cout << "PRIORITY " << i << ": " << results[i] << '\n';
+            std::cout << "PRIORITY " << i << ": " << partial << results[i] << '\n';
         }
 
         std::cout << '\n';
