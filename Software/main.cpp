@@ -61,19 +61,19 @@ int main() {
         // extract special keys
         {
             if (input & ctrl) {
-                std::cout << "CTRL\n";
+                std::cout << "CTRL";
             }
 
             if (input & alt) {
-                std::cout << "ALT\n";
+                std::cout << "ALT ";
             }
 
             if (input & shift) {
-                std::cout << "SHIFT\n";
+                std::cout << "SHIFT ";
             }
 
             if (input & win) {
-                std::cout << "WIN\n";
+                std::cout << "WIN ";
             }
         }
 
@@ -81,7 +81,96 @@ int main() {
         {
             short code = input & key;
 
-            // TODO
+            switch (input & key) {
+                case 0 ... 9:
+                    std::cout << code;
+                    break;
+                case 10 ... 35:
+                    std::cout << (char) ((code + 55));
+                    break;
+                case 36:
+                    std::cout << '`';
+                    break;
+                case 37:
+                    std::cout << '-';
+                    break;
+                case 38:
+                    std::cout << '=';
+                    break;
+                case 39:
+                    std::cout << '[';
+                    break;
+                case 40:
+                    std::cout << ']';
+                    break;
+                case 41:
+                    std::cout << '\\';
+                    break;
+                case 42:
+                    std::cout << ';';
+                    break;
+                case 43:
+                    std::cout << '\'';
+                    break;
+                case 44:
+                    std::cout << '<';
+                    break;
+                case 45:
+                    std::cout << '>';
+                    break;
+                case 46:
+                    std::cout << '/';
+                    break;
+                case 47:
+                    std::cout << "SPACE";
+                    break;
+                case 48:
+                    std::cout << "TAB";
+                    break;
+                case 49:
+                    std::cout << "ENTER";
+                    break;
+                case 50:
+                    std::cout << "BACKSPACE";
+                    break;
+                case 51:
+                    std::cout << "DELETE";
+                    break;
+                case 52:
+                    std::cout << "ESCAPE";
+                    break;
+                case 53:
+                    std::cout << "CAPSLOCK";
+                    break;
+                case 54 ... 65:
+                    std::cout << 'F' << code - 53;
+                    break;
+                case 66:
+                    std::cout << "UP";
+                    break;
+                case 67:
+                    std::cout << "DOWN";
+                    break;
+                case 68:
+                    std::cout << "LEFT";
+                    break;
+                case 69:
+                    std::cout << "RIGHT";
+                    break;
+                case 70:
+                    std::cout << "M1";
+                    break;
+                case 71:
+                    std::cout << "M2";
+                    break;
+                case 72:
+                    std::cout << "M3";
+                    break;
+                default:
+                    std::cout << "NO_KEY";
+            }
+
+            std::cout << '\n';
         }
     }
 }
