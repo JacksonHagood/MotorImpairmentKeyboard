@@ -56,24 +56,27 @@ int main() {
     std::cin >> std::hex;
 
     while (true) {
+        std::cout << "ENTER MENA KEYSTROKE: ";
         std::cin >> input;
+
+        std::cout << "KEYSTROKE: ";
 
         // extract special keys
         {
             if (input & ctrl) {
-                std::cout << "CTRL";
+                std::cout << "CTRL + ";
             }
 
             if (input & alt) {
-                std::cout << "ALT ";
+                std::cout << "ALT + ";
             }
 
             if (input & shift) {
-                std::cout << "SHIFT ";
+                std::cout << "SHIFT + ";
             }
 
             if (input & win) {
-                std::cout << "WIN ";
+                std::cout << "WIN + ";
             }
         }
 
@@ -167,10 +170,10 @@ int main() {
                     std::cout << "M3";
                     break;
                 default:
-                    std::cout << "NO_KEY";
+                    std::cout << "INVALID_KEY";
             }
 
-            std::cout << '\n';
+            std::cout << "\n\n";
         }
     }
 }
