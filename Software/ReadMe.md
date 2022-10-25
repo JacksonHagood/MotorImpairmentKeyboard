@@ -49,14 +49,14 @@ bits for the character keys
 | 44      | <           |
 | 45      | >           |
 | 46      | /           |
-| 47      | space       |
-| 48      | tab         |
-| 49      | enter       |
-| 50      | backspace   |
-| 51      | delete      |
-| 52      | esc         |
-| 53      | caps        |
-| 54 - 65 |F1 - F12     |
+| 47      | SPACE       |
+| 48      | TAB         |
+| 49      | ENTER       |
+| 50      | BACKSPACE   |
+| 51      | DELETE      |
+| 52      | ESC         |
+| 53      | CAPS        |
+| 54 - 65 | F1 - F12    |
 | 66      | UP          |
 | 67      | DOWN        |
 | 68      | LEFT        |

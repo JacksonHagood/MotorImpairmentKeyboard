@@ -1,9 +1,6 @@
 #include "Node.h"
 #include "Trie.h"
 #include <iostream>
-#include <string>
-#include <unistd.h>
-#include <bits/stdc++.h>
 #include <sstream>
 
 // global trie instance
@@ -18,36 +15,31 @@ std::string suggestions[3] = {"", "", ""};
 // input variable
 unsigned short input;
 
-void sendKeystroke()
-{
+void sendKeystroke() {
     std::cout << "\n\tKEYSTROKE:  ";
 
     unsigned char modifier = 0;
 
     // determine special key presses
-    if (input & 0x8000)
-    {
+    if (input & 0x8000) {
         std::cout << "CTRL + ";
         modifier |= 0b00000001;
     }
-    if (input & 0x4000)
-    {
+    if (input & 0x4000) {
         std::cout << "ALT + ";
         modifier |= 0b00000100;
     }
-    if (input & 0x2000)
-    {
+    if (input & 0x2000) {
         std::cout << "SHIFT + ";
         modifier |= 0b00100000;
     }
-    if (input & 0x1000)
-    {
+    if (input & 0x1000) {
         std::cout << "WIN + ";
         // TODO
     }
 
     unsigned short key = input & 0x00FF;
-    unsigned char character = 0;
+    unsigned char character;
 
     // determine character key
     switch (key) {
@@ -168,14 +160,14 @@ void sendKeystroke()
             return;
     }
 
-    // TODO: send decoded keystroke over USB
-    // TODO: send suggestion if M1, M2, or M3 is pressed
     if (character >= 0xF0) {
         // case 1: send auto-complete result
         for (char c : suggestions[character - 0xF0]) {
             std::ostringstream keystroke;
             keystroke << "sudo echo -ne \"\\0\\0\\" << 'x' << std::hex << (int) (c - 97 + 0x4) << std::dec << "\\0\\0\\0\\0\\0\" > /dev/hidg0";
+            
             std::cout << "\tSENDING: " << keystroke.str() << '\n';
+
             system(keystroke.str().c_str());
             system("sudo echo -ne \"\\0\\0\\0\\0\\0\\0\\0\\0\" > /dev/hidg0");
         }
@@ -186,34 +178,30 @@ void sendKeystroke()
 
         if (modifier == 0) {
             keystroke << "0\\0\\";
-        }
-        else {
+        } else {
             keystroke << 'x' << std::hex << (int) modifier << std::dec << "\\0\\";
         }
 
         keystroke << 'x' << std::hex << (int) character << std::dec << "\\0\\0\\0\\0\\0\" > /dev/hidg0";
 
         std::cout << "\tSENDING: " << keystroke.str() << '\n';
+
         system(keystroke.str().c_str());
         system("sudo echo -ne \"\\0\\0\\0\\0\\0\\0\\0\\0\" > /dev/hidg0");
     }
     
 }
 
-void updateSuggestions()
-{
+void updateSuggestions() {
     unsigned short key = input & 0x00FF;
 
-    if (key >= 10 && key <= 35 && !(input & 0xF000))
-    {
-        // case 1:if  alphabetic key is pressed that is not a shortcut, update suggestions
+    if (key >= 10 && key <= 35 && !(input & 0xF000)) {
+        // case 1: if  alphabetic key is pressed that is not a shortcut, update suggestions
         partial += (char)(key + 87);
         suggestions[0] = "", suggestions[1] = "", suggestions[2] = "";
 
         z.getCandidates(partial, suggestions);
-    }
-    else
-    {
+    } else {
         // case 2: otherwise, reset suggestions
         partial = "";
         suggestions[0] = "", suggestions[1] = "", suggestions[2] = "";
@@ -221,14 +209,10 @@ void updateSuggestions()
 
     std::cout << "\n\tPARTIAL:    " << partial << '\n';
 
-    for (unsigned int i = 0; i < 3; i++)
-    {
-        if (suggestions[i] == "")
-        {
+    for (unsigned int i = 0; i < 3; i++) {
+        if (suggestions[i] == "") {
             std::cout << "\tPRIORITY " << i << ": \033[31mNONE\033[0m\n";
-        }
-        else
-        {
+        } else {
             std::cout << "\tPRIORITY " << i << ": \033[33m" << partial << "\033[0m\033[32m" << suggestions[i] << "\033[0m\n";
         }
     }
@@ -238,14 +222,12 @@ void updateSuggestions()
     // TODO: update LCDs with suggestions over GPIO
 }
 
-int main()
-{
+int main() {
     // initialize standard in for hex
     std::cin >> std::hex;
 
     // loop forever
-    while (true)
-    {
+    while (true) {
         // TODO: change to polling over GPIO
         std::cout << "ENTER MENA KEYSTROKE: ";
         std::cin >> input;
