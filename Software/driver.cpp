@@ -1,5 +1,6 @@
 #include "Node.h"
 #include "Trie.h"
+#include "new.h"
 #include <iostream>
 #include <sstream>
 
@@ -187,12 +188,13 @@ void sendKeystroke() {
         std::cout << "\tSENDING: " << keystroke.str() << '\n';
 
         system(keystroke.str().c_str());
+
         system("sudo echo -ne \"\\0\\0\\0\\0\\0\\0\\0\\0\" > /dev/hidg0");
     }
     
 }
 
-void updateSuggestions() {
+void updateSuggestions(LCDList l) {
     unsigned short key = input & 0x00FF;
 
     if (key >= 10 && key <= 35 && !(input & 0xF000)) {
@@ -209,21 +211,31 @@ void updateSuggestions() {
 
     std::cout << "\n\tPARTIAL:    " << partial << '\n';
 
+    std::string completeSuggestions[3] = {"", "", ""};
     for (unsigned int i = 0; i < 3; i++) {
         if (suggestions[i] == "") {
             std::cout << "\tPRIORITY " << i << ": \033[31mNONE\033[0m\n";
         } else {
             std::cout << "\tPRIORITY " << i << ": \033[33m" << partial << "\033[0m\033[32m" << suggestions[i] << "\033[0m\n";
+            completeSuggestions[i] = partial + suggestions[i];
         }
     }
 
     std::cout << '\n';
 
     // TODO: update LCDs with suggestions over GPIO
+
+    l.suggest(completeSuggestions);
 }
 
 int main() {
     // initialize standard in for hex
+      //create vector of i2c addresses
+    std::vector<int> addrs{0x26,0x25};
+
+    LCDList l(addrs);
+    l.clear();
+
     std::cin >> std::hex;
 
     // loop forever
@@ -236,6 +248,6 @@ int main() {
         sendKeystroke();
 
         // update auto-complete suggestions
-        updateSuggestions();
+        updateSuggestions(l);
     }
 }
