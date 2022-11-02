@@ -16,6 +16,8 @@ std::string suggestions[3] = {"", "", ""};
 // input variable
 unsigned short input;
 
+LCDList* l;
+
 void sendKeystroke() {
     std::cout << "\n\tKEYSTROKE:  ";
 
@@ -228,26 +230,33 @@ void updateSuggestions(LCDList l) {
     l.suggest(completeSuggestions);
 }
 
+void interrupt (void) {
+    // TODO: get input from interrupt signal (MENA)
+    input = 0x000A;
+
+    // send keystroke over USB
+    sendKeystroke();
+
+    // update auto-complete suggestions
+    updateSuggestions(*l);
+}
+
 int main() {
-    // initialize standard in for hex
-      //create vector of i2c addresses
+    //create vector of i2c addresses
     std::vector<int> addrs{0x26,0x25};
 
-    LCDList l(addrs);
-    l.clear();
+    l = new LCDList(addrs);
+    l->clear();
 
+    // initialize standard in for hex
     std::cin >> std::hex;
 
+    wiringPiSetup();
+    wiringPiSetupGpio();
+
+    // enable interrupts for pin 40 (GPIO 21)
+    wiringPiISR(21, INT_EDGE_RISING, &interrupt);
+
     // loop forever
-    while (true) {
-        // TODO: change to polling over GPIO
-        std::cout << "ENTER MENA KEYSTROKE: ";
-        std::cin >> input;
-
-        // send keystroke over USB
-        sendKeystroke();
-
-        // update auto-complete suggestions
-        updateSuggestions(l);
-    }
+    while (true);
 }
