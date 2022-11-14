@@ -1,6 +1,7 @@
 #include "Node.h"
 #include "Trie.h"
 #include "new.h"
+
 #include <iostream>
 #include <sstream>
 
@@ -16,6 +17,7 @@ std::string suggestions[3] = {"", "", ""};
 // input variable
 unsigned short input;
 
+// lcd list
 LCDList* l;
 
 void sendKeystroke() {
@@ -231,8 +233,8 @@ void updateSuggestions(LCDList l) {
 }
 
 void interrupt (void) {
-    // TODO: get input from interrupt signal (MENA)
-    input = 0x000A;
+    std::cout << "INTERRUPT\nMENA: ";
+    std::cin >> input;
 
     // send keystroke over USB
     sendKeystroke();
@@ -242,18 +244,22 @@ void interrupt (void) {
 }
 
 int main() {
-    //create vector of i2c addresses
-    std::vector<int> addrs{0x26,0x25};
+    // create vector of i2c addresses
+    std::vector<int> addrs{0x26, 0x25};
 
+    // create lcd list
     l = new LCDList(addrs);
     l->clear();
 
     // initialize standard in for hex
     std::cin >> std::hex;
 
+    // setup GPIO
     wiringPiSetup();
     wiringPiSetupGpio();
 
+    pullUpDnControl(21, PUD_DOWN);
+    
     // enable interrupts for pin 40 (GPIO 21)
     wiringPiISR(21, INT_EDGE_RISING, &interrupt);
 
