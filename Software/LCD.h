@@ -13,13 +13,9 @@
 // Define some device constants
 #define LCD_CHR  1 // Mode - Sending data
 #define LCD_CMD  0 // Mode - Sending command
-
-#define LINE1  0x80 // 1st line
+#define LINE1  0x80 // 1st line (use lineLoc to change line)
 #define LINE2  0xC0 // 2nd line
-
 #define LCD_BACKLIGHT   0x08  // On
-// LCD_BACKLIGHT = 0x00  # Off
-
 #define ENABLE  0b00000100 // Enable bit
 
 class LCD {
@@ -28,6 +24,8 @@ class LCD {
     int addr;
     int fd;
 
+    //Initialize LCD with a given I2C Address
+    //I2C addresses can be found by doing sudo i2cdetect -y 1
     LCD(int addr) {
       this->addr = addr;
       if (wiringPiSetup () == -1) exit (1);
@@ -44,11 +42,6 @@ class LCD {
     // go to location on LCD
     void lcdLoc(int line)   {
       lcd_byte(line, LCD_CMD);
-    }
-
-    // out char to LCD at current position
-    void typeChar(char val)   {
-      lcd_byte(val, LCD_CHR);
     }
 
     // this allows use of any size string
@@ -110,15 +103,15 @@ class LCDList {
         LCD* l = new LCD(addrs[i]);
         LCDs.push_back(l);
       }
-      std::cout << "Created" << std::endl;
+      std::cout << "Created LCDList with " << LCDs.size() << " LCDs" << std::endl;
     }
 
     //Take in vector of suggestions and display it on all LCDs
     void suggest(std::string* suggestions) {
-      LCDs.at(0)->suggest(suggestions[0].c_str());
-      LCDs.at(1)->suggest(suggestions[1].c_str());
-      
-      return;
+      if(suggestions == nullptr) {
+        return;
+      }
+
       for(long unsigned int i = 0; i < LCDs.size(); i++) {
         std::cout << suggestions[i] << std::endl;
         LCDs.at(i)->suggest(suggestions[i].c_str());
@@ -131,27 +124,3 @@ class LCDList {
       }
     }
 };
-
-/*
-int main()   {
-
-  //create vector of i2c addresses
-  std::vector<int> addrs;
-  addrs.push_back(0x27);
-
-  //create vector of text suggestions, should be as long as the addrs vector
-  std::string suggestions[3] = {"hello", "world", "aaaa"};
-
-  LCDList l(addrs);
-  std::cout << "HAR"; 
-  //LCD l(0x27);
-  while (1)   {
-    l.suggest(suggestions);
-    delay(2500);
-    l.suggest(suggestions);
-    delay(2500);
-    l.clear();
-  }
-  return 0;
-}
-*/

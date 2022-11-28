@@ -5,6 +5,9 @@
 Use the Makefile to create one of three programs. Driver program is for actual development. Other
 programs demonstrate specific features.
 
+## Prerequisites
+Install Wiring
+
 ### Driver Program Commands
 - Compile: make driver
 - Execute: ./driver

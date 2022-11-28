@@ -1,7 +1,6 @@
 #include "Node.h"
 #include "Trie.h"
-#include "new.h"
-
+#include "LCD.h"
 #include <iostream>
 #include <sstream>
 
