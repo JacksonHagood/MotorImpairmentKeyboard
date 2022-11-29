@@ -1,6 +1,3 @@
-
-
-
 // Array to map key coordinate to 
 const unsigned short MENA_MAP[5][16] = {
     {/* MENA vals of row 0 keys */},

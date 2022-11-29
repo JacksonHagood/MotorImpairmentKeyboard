@@ -1,27 +1,8 @@
 # Software
 
-## Usage
+## Components
 
-Use the Makefile to create one of three programs. Driver program is for actual development. Other
-programs demonstrate specific features.
-
-## Prerequisites
-Install Wiring
-
-### Driver Program Commands
-- Compile: make driver
-- Execute: ./driver
-
-### Auto-complete Test Program Commands
-- Compile: make test
-- Execute: ./test
-
-### MENA Test Program Commands
-- Compile: make MENA
-- Execute: ./MENA
-
-### clean
-- Clean: make clean
+Software is located on the Raspberry Pi (primarily C++) and the Pico (Circuit Python).
 
 ## MENA
 

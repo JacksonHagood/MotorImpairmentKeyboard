@@ -1,9 +1,3 @@
-driver: driver.o
-	g++ driver.o -o driver -lwiringPi
-
-driver.o: driver.cpp
-	g++ -c driver.cpp -lwiringPi
-
 test: test.o
 	g++ test.o -o test
 

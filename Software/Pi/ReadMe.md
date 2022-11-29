@@ -1,73 +1,51 @@
-# Software
+# Pi Software
 
-## Usage
+## Prerequisites
 
-Use the Makefile to create one of three programs. Driver program is for actual development. Other
-programs demonstrate specific features.
+- Install WiringPi
+- Enable the Raspberry Pi for Key Mime Pi: https://mtlynch.io/key-mime-pi/
 
-### Driver Program Commands
+## Components
+
+### dictionary.txt
+
+Dictionary file compiling 10000 words in frequency order. This is important for Trie construction. https://github.com/first20hours/google-10000-english.
+
+### driver.cpp
+
+Driver program that is the entry point for the Raspberri Pi. Main runs infinitely and waits for hardware interrupts in GPIO 21. Hardware interrupts indicate a key being pressed. When a key is pressed, the Pi recieves a MENA value that is decoded into its components. Using this, the auto-complete suggestions are updates and any keystrokes are sent using Key Mime Pi shell commands.
+
+### err.txt
+
+Programs output (redirected from cout).
+
+### LCD.h
+
+Class definitions for interracting with the three LCD's to display auto-complete suggestions.
+
+### Node.H
+
+Class definition for a node object used by the Trie data structure.
+
+### run_keyboard.sh
+
+Command to execute serial.sh and run driver with cout redirected to err.txt.
+
+### serial.sh
+
+Bash script to send MENA signals from Pico to driver program.
+
+### Trie.h
+
+Class definition for Trie data structure used for auto-complete suggestion determination.
+
+## Commands
+
+Use the makefile to compile and then execute the binary file
+
+### Driver Program Execution
 - Compile: make driver
 - Execute: ./driver
 
-### Auto-complete Test Program Commands
-- Compile: make test
-- Execute: ./test
-
-### MENA Test Program Commands
-- Compile: make MENA
-- Execute: ./MENA
-
 ### clean
 - Clean: make clean
-
-## MENA
-
-MENA uses 2 byte hex numbers (unsigned short). First 4 bits for defining special keys. Remaining
-bits for the character keys
-
-### Special keys:
-| bit | key   |
-|-----|-------|
-| 0   | ALT   |
-| 1   | CTRL  |
-| 2   | SHIFT |
-| 3   | WIN   |
-
-### Character keys:
-| char    | key         |
-|---------|-------------|
-| 0 - 9   | 0 - 9       |
-| 10 - 35 | a - z       |
-| 36      | `           |
-| 37      | -           |
-| 38      | =           |
-| 39      | [           |
-| 40      | ]           |
-| 41      | \           |
-| 42      | ;           |
-| 43      | '           |
-| 44      | <           |
-| 45      | >           |
-| 46      | /           |
-| 47      | SPACE       |
-| 48      | TAB         |
-| 49      | ENTER       |
-| 50      | BACKSPACE   |
-| 51      | DELETE      |
-| 52      | ESC         |
-| 53      | CAPS        |
-| 54 - 65 | F1 - F12    |
-| 66      | UP          |
-| 67      | DOWN        |
-| 68      | LEFT        |
-| 69      | RIGHT       |
-| 70      | M1          |
-| 71      | M2          |
-| 72      | M3          |
-| other   | INVALID_KEY |
-
-### Examples:
-- 0x100A: WIN + a
-- 0xFFFF: CTRL + ALT + SHIFT + WIN + INVALID_KEY
-- 0x2002: SHIFT + 2
-- 0x000F: f

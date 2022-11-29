@@ -9,10 +9,8 @@
 
 
 int main() {
-
     // Serial read
     int fds[2];
-
 
     int serial_port = open("/dev/ttyACM0", O_RDWR);
 

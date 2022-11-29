@@ -1,7 +1,3 @@
-//https://github.com/WiringPi/WiringPi/blob/master/INSTALL
-//INSTALL WIRING PI
-//add -lwiringPi flag to compile command
-
 #include <wiringPiI2C.h>
 #include <wiringPi.h>
 #include <stdlib.h>
@@ -13,9 +9,13 @@
 // Define some device constants
 #define LCD_CHR  1 // Mode - Sending data
 #define LCD_CMD  0 // Mode - Sending command
-#define LINE1  0x80 // 1st line (use lineLoc to change line)
+
+#define LINE1  0x80 // 1st line
 #define LINE2  0xC0 // 2nd line
+
 #define LCD_BACKLIGHT   0x08  // On
+// LCD_BACKLIGHT = 0x00  # Off
+
 #define ENABLE  0b00000100 // Enable bit
 
 class LCD {
@@ -24,8 +24,6 @@ class LCD {
     int addr;
     int fd;
 
-    //Initialize LCD with a given I2C Address
-    //I2C addresses can be found by doing sudo i2cdetect -y 1
     LCD(int addr) {
       this->addr = addr;
       if (wiringPiSetup () == -1) exit (1);
@@ -42,6 +40,11 @@ class LCD {
     // go to location on LCD
     void lcdLoc(int line)   {
       lcd_byte(line, LCD_CMD);
+    }
+
+    // out char to LCD at current position
+    void typeChar(char val)   {
+      lcd_byte(val, LCD_CHR);
     }
 
     // this allows use of any size string
@@ -103,15 +106,15 @@ class LCDList {
         LCD* l = new LCD(addrs[i]);
         LCDs.push_back(l);
       }
-      std::cout << "Created LCDList with " << LCDs.size() << " LCDs" << std::endl;
+      std::cout << "Created" << std::endl;
     }
 
     //Take in vector of suggestions and display it on all LCDs
     void suggest(std::string* suggestions) {
-      if(suggestions == nullptr) {
-        return;
-      }
-
+      LCDs.at(0)->suggest(suggestions[0].c_str());
+      LCDs.at(1)->suggest(suggestions[1].c_str());
+      
+      return;
       for(long unsigned int i = 0; i < LCDs.size(); i++) {
         std::cout << suggestions[i] << std::endl;
         LCDs.at(i)->suggest(suggestions[i].c_str());

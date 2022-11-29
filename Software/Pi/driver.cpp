@@ -1,6 +1,6 @@
 #include "Node.h"
 #include "Trie.h"
-#include "new.h"
+#include "LCD.h"
 
 #include <iostream>
 #include <sstream>
@@ -20,12 +20,13 @@ unsigned short input;
 // lcd list
 LCDList* l;
 
+// sends keystroke kept in input to the computer / device over USB
 void sendKeystroke() {
     std::cout << "\n\tKEYSTROKE:  ";
 
     unsigned char modifier = 0;
 
-    // determine special key presses
+    // determine what special key presses there are
     if (input & 0x8000) {
         std::cout << "CTRL + ";
         modifier |= 0b00000001;
@@ -40,7 +41,7 @@ void sendKeystroke() {
     }
     if (input & 0x1000) {
         std::cout << "WIN + ";
-        // TODO
+        modifier |= 0b10111100;
     }
 
     unsigned short key = input & 0x00FF;
@@ -48,7 +49,11 @@ void sendKeystroke() {
 
     // determine character key
     switch (key) {
-        case 0 ... 9:
+        case 0:
+            std::cout << "0\n";
+            character = 0x27;
+            break;
+        case 1 ... 9:
             std::cout << (key) << '\n';
             character = 0x27 - (10 - key);
             break;
@@ -161,23 +166,25 @@ void sendKeystroke() {
             character = 0xF2;
             break;
         default:
-            std::cout << "INVALID_KEY\n";
+            std::cout << "NO_KEY\n";
             character = 0x0;
             break;
     }
 
     if (character >= 0xF0) {
-        // case 1: send auto-complete result
+        // case 1: send auto-complete result when macro is pressed
         for (char c : suggestions[character - 0xF0]) {
             std::ostringstream keystroke;
             keystroke << "sudo echo -ne \"\\0\\0\\" << 'x' << std::hex << (int) (c - 97 + 0x4) << std::dec << "\\0\\0\\0\\0\\0\" > /dev/hidg0";
             
             std::cout << "\tSENDING: " << keystroke.str() << '\n';
 
+            // press and release
             system(keystroke.str().c_str());
             system("sudo echo -ne \"\\0\\0\\0\\0\\0\\0\\0\\0\" > /dev/hidg0");
         }
 
+        // add space afterwards
         system("sudo echo -ne \"\\0\\0\\x2C\\0\\0\\0\\0\\0\" > /dev/hidg0");
         system("sudo echo -ne \"\\0\\0\\0\\0\\0\\0\\0\\0\" > /dev/hidg0");
     } else {
@@ -195,13 +202,14 @@ void sendKeystroke() {
 
         std::cout << "\tSENDING: " << keystroke.str() << '\n';
 
+        // press and release
         system(keystroke.str().c_str());
-
         system("sudo echo -ne \"\\0\\0\\0\\0\\0\\0\\0\\0\" > /dev/hidg0");
     }
     
 }
 
+// updates auto-complete suggestions
 void updateSuggestions(LCDList l) {
     unsigned short key = input & 0x00FF;
 
@@ -211,7 +219,6 @@ void updateSuggestions(LCDList l) {
         suggestions[0] = "", suggestions[1] = "", suggestions[2] = "";
 
         z.getCandidates(partial, suggestions);
-        std::cout << "Candidates: " << suggestions[0] << " " << input << "\n";
     } else {
         // case 2: otherwise, reset suggestions
         std::cout << "RESET\n";
@@ -222,6 +229,7 @@ void updateSuggestions(LCDList l) {
     std::cout << "\n\tPARTIAL:    " << partial << '\n';
 
     std::string completeSuggestions[3] = {"", "", ""};
+
     for (unsigned int i = 0; i < 3; i++) {
         if (suggestions[i] == "") {
             std::cout << "\tPRIORITY " << i << ": \033[31mNONE\033[0m\n";
@@ -232,8 +240,6 @@ void updateSuggestions(LCDList l) {
     }
 
     std::cout << '\n';
-
-    // TODO: update LCDs with suggestions over GPIO
 
     l.suggest(completeSuggestions);
 }
