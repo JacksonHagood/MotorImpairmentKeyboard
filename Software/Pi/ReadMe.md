@@ -17,7 +17,7 @@ Driver program that is the entry point for the Raspberri Pi. Main runs infinitel
 
 ### err.txt
 
-Programs output (redirected from cout).
+Programs output (redirected from standard out/error).
 
 ### LCD.h
 
@@ -29,11 +29,11 @@ Class definition for a node object used by the Trie data structure.
 
 ### run_keyboard.sh
 
-Command to execute serial.sh and run driver with cout redirected to err.txt.
+Command to execute serial.sh and run driver with serial.sh piped into driver and standard out/error redirected to err.txt.
 
 ### serial.sh
 
-Bash script to send MENA signals from Pico to driver program.
+Bash script to read MENA data from Pico
 
 ### Trie.h
 
