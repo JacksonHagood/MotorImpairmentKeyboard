@@ -51,6 +51,10 @@ class Trie {
             std::ifstream input(fileName);
             std::string word;
 
+            if (!input.is_open()) {
+                std::cout << "COULD NOT OPEN FILE\n";
+            }
+
             // iterate through dictionary
             while (input >> word) {
                 // start at root

@@ -1,0 +1,13 @@
+Created
+INTERRUPT
+MENA: 
+	KEYSTROKE:  CAPSLOCK
+	SENDING: sudo echo -ne "\0\0\x39\0\0\0\0\0" > /dev/hidg0
+RESET
+
+	PARTIAL:    
+	PRIORITY 0: [31mNONE[0m
+	PRIORITY 1: [31mNONE[0m
+	PRIORITY 2: [31mNONE[0m
+
+EXIT_INTERRUPT
