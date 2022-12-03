@@ -1,0 +1,47 @@
+PCB statistics report
+=====================
+- Date: 11/4/2022 1:59:08 PM
+- Project: MIKey
+- Board name: MIKey
+
+Board
+-----
+- Width: 388.0000 mm
+- Height: 247.0000 mm
+- Area: 95836.0000 sq. mm
+
+Pads
+----
+- Through hole: 277
+- SMD: 43
+- Connector: 0
+- NPTH: 4
+
+Vias
+----
+- Through vias: 13
+- Blind/buried: 0
+- Micro vias: 0
+
+Components
+----------
+
+|        | Front Side | Back Side | Total |
+|--------|------------|-----------|-------|
+|THT:    |        86  |        0  |   86  |
+|SMD:    |         0  |        0  |    0  |
+|Total:  |        86  |        0  |   86  |
+|        |            |           |       |
+
+Drill holes
+-----------
+
+| Count | Shape |    X Size |    Y Size | Plated | Via/Pad | Start Layer | Stop Layer |
+|-------|-------|-----------|-----------|--------|---------|-------------|------------|
+|    80 | Round | 0.6000 mm | 0.6000 mm |    PTH |     Pad |        F.Cu |       B.Cu |
+|    80 | Round | 1.0000 mm | 1.0000 mm |    PTH |     Pad |        F.Cu |       B.Cu |
+|    74 | Round | 0.8000 mm | 0.8000 mm |    PTH |     Pad |        F.Cu |       B.Cu |
+|    43 | Round | 1.0200 mm | 1.0200 mm |    PTH |     Pad |        F.Cu |       B.Cu |
+|    13 | Round | 0.4000 mm | 0.4000 mm |    PTH |     Via |        F.Cu |       B.Cu |
+|     2 | Round | 1.5000 mm | 1.5000 mm |   NPTH |     Pad |        F.Cu |       B.Cu |
+|     2 | Round | 1.8000 mm | 1.8000 mm |   NPTH |     Pad |        F.Cu |       B.Cu |
